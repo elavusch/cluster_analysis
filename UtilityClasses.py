@@ -16,12 +16,19 @@ class Data:
 
     """
     def __init__(self, columns, rows=None):
+        """ Конструктор класса Data
+        Заполняет колонки, имена колонок, строки
+
+        :param columns: список объектов Column
+        :param rows: список объектов Row
+        """
         self._columns = columns
+        # TODO: долгое чтение разных массивов
         if rows is None:
             self._rows = []
-            for i, element in enumerate(self._columns[0]): #i - это строка
+            for i, element in enumerate(self._columns[0]): # i - это строка
                 rowArray = []
-                for j in range (0, len(self._columns)):        #j - это колонка
+                for j in range(0, len(self._columns)): # j - это колонка
                     rowArray.append(self._columns[j][i])
                 self._rows.append(Row(i, rowArray))
         else:
@@ -145,10 +152,9 @@ class GlobalData(Data):
     """
 
     def getDummyCluster(self, clusters):
-
-        # под словом dummyCluster имеются в виду все такие точки, которые не входят ни в один кластер
-        # программа работает с ними, как с самостоятельным фантомным кластером. Просто так удобнее.
         """ Находит все точки, не принадлежащие ни одному кластеру.
+        Под словом dummyCluster имеются в виду все такие точки, которые не входят ни в один кластер
+        программа работает с ними, как с самостоятельным фантомным кластером. Просто так удобнее.
 
         :param clusters: получает на вход массив всех кластеров
         :return: возвращает объект типа Cluster, представляющий из себя набор точек, не входящих ни в один существующий кластер

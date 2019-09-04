@@ -2,8 +2,10 @@ from PyQt5.QtWidgets import *
 
 
 class SetTsneParams(QMainWindow):
-    def __init__(self, parent,in_len):
+    def __init__(self, parent, in_len):
         super().__init__(parent)
+
+        # Default
         self.previous_window = parent
         self.perplexity = 50.0
         self.dim = 2
@@ -40,8 +42,8 @@ class SetTsneParams(QMainWindow):
     def perf(self):
         print("everything is good")
 
-    def set_params(self):
-        if(self.prepareData()):
+    def set_params(self):  # TODO: временно исключен промежуточный этап
+        if self.prepareData():  # TODO: what is this func doing?
             self.close()
             self.previous_window.set_tsne_params_pressed(self.perplexity, self.dim, self.iterations)
 

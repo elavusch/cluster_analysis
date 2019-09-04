@@ -3,6 +3,14 @@ from TSNEImplementation import *
 
 class TsneSolver:
     def __init__(self, p=30.0, m_i=500, n_d=2, i_d=50):
+        """ Конструктор класса TsneSolver
+        Устанавливает параметры t-SNE
+
+        :param p: перплексия
+        :param m_i: количество итераций
+        :param n_d: новая размерность
+        :param i_d: исходная размерность
+        """
         self.perplexity = p
         self.max_iteration = m_i
         self.no_dims = n_d
@@ -10,13 +18,27 @@ class TsneSolver:
         self.tsne_error = 0
 
     def set_params(self, p=30.0, m_i=500, n_d=2, i_d=50):
+        """ Метод для установки параметров t-SNE
+
+        :param p: перплексия
+        :param m_i: количество итераций
+        :param n_d: новая размерность
+        :param i_d: исходная размерность
+        """
         self.perplexity = p
         self.max_iteration = m_i
         self.no_dims = n_d
         self.initial_dims = i_d
 
-    def reduce_dim(self, data):
+
+    def reduce_dim(self, data):  # TODO: change to NumPy from begin
+        """ Преобразование GlobalData в NumPy.ndarray -> запуск self.tsne
+
+        :param data: объект GlobalData(Data)
+        :return: NumPy.ndarray(<строки в файле>*<кол-во итераций>)  TODO: change
+        """
         a = []
+        # list(GlobalData) == rows in file
         rows_to_clusterize = list(data)
         for i in range(len(rows_to_clusterize)):
             for j in range(len(rows_to_clusterize.__getitem__(i))):
@@ -25,13 +47,11 @@ class TsneSolver:
         data_numpy_array = np.array(a)
         data_numpy_array = np.reshape(data_numpy_array, (-1, len(rows_to_clusterize.__getitem__(0))))
 
-        print("initial data- ",data_numpy_array)
         result = self.tsne(data_numpy_array)
-        print("result data - ", result)
         return result
 
     def tsne(self, X=np.array([])):
-        """
+        """ Here is magic works  # TODO: i will stop it
             Runs t-SNE on the dataset in the NxD array X to reduce its
             dimensionality to no_dims dimensions. The syntaxis of the function is
             `Y = tsne.tsne(X, no_dims, perplexity), where X is an NxD NumPy array.
@@ -98,7 +118,7 @@ class TsneSolver:
             # Compute current value of cost function
             if (iter + 1) % 10 == 0:
                 C = np.sum(P * np.log(P / Q))
-                print("Iteration %d: error is %f" % (iter + 1, C))
+                # print("Iteration %d: error is %f" % (iter + 1, C))
                 self.tsne_error = C # error saving
             # Stop lying about P-values
             if iter == 100:

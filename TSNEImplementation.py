@@ -1,13 +1,13 @@
 from PyQt5.QtWidgets import *
-from UtilityClasses import Cluster
-import Constants
+# from UtilityClasses import Cluster
+# import Constants
 import numpy as np
 import pylab
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import pyglet
-import time
+# import time
 import os
-import copy
+# import copy
 
 
 class TSNEWindow(QMainWindow):
@@ -73,20 +73,23 @@ class TSNEWindow(QMainWindow):
 
             data_numpy_array = np.array(a)
             data_numpy_array = np.reshape(data_numpy_array, (-1, len(self.rowsToClusterize.__getitem__(0))))
-            print(data_numpy_array)
-            result = self.tsne(data_numpy_array, 2, len(self.rowsToClusterize.__getitem__(0)), self.perplexity, self.max_iteration, 1)
-            print("x=", data_numpy_array)
-            print("y=", result)
-            print("ошибка= ", self.tsne_error)
+            # print(data_numpy_array)
+            result = self.tsne(data_numpy_array, 2,
+                               len(self.rowsToClusterize.__getitem__(0)),
+                               self.perplexity,
+                               self.max_iteration, 1)
+            # print("x =", data_numpy_array)
+            # print("y =", result)
+            # print("ошибка =", self.tsne_error)
 
             # ОТРИСОВКА АНИМАЦИИ
 
             animation = pyglet.image.Animation.from_image_sequence(self.frames_list, 0.25, loop=False)
             # Создаем спрайт объект
-            animSprite = pyglet.sprite.Sprite(animation)
+            anim_sprite = pyglet.sprite.Sprite(animation)
             # Главное окно Pyglet
-            w = animSprite.width
-            h = animSprite.height
+            w = anim_sprite.width
+            h = anim_sprite.height
             win = pyglet.window.Window(width=w, height=h)
             # Устанавливаем белый цвет фона
             pyglet.gl.glClearColor(1, 1, 1, 1)
@@ -94,13 +97,13 @@ class TSNEWindow(QMainWindow):
             @ win.event
             def on_draw():
                 win.clear()
-                animSprite.draw()
+                anim_sprite.draw()
             pyglet.app.run()
 
            # self.remove_all_frames()
 
 
-    def perform_without_drawing(self,dim):
+    def perform_without_drawing(self, dim):
         if self.prepareData():
             a = []
             # a = np.array(a)
@@ -110,11 +113,11 @@ class TSNEWindow(QMainWindow):
 
             data_numpy_array = np.array(a)
             data_numpy_array = np.reshape(data_numpy_array, (-1, len(self.rowsToClusterize.__getitem__(0))))
-            print(data_numpy_array)
+            # print(data_numpy_array)
             result = self.tsne(data_numpy_array, dim, len(self.rowsToClusterize.__getitem__(0)), self.perplexity, self.max_iteration, 1)
-            print("x=", data_numpy_array)
-            print("y=", result)
-            print("ошибка= ", self.tsne_error)
+            # print("x=", data_numpy_array)
+            # print("y=", result)
+            # print("ошибка= ", self.tsne_error)
             return result
 
     def reduce_data_dim(self, dim):
@@ -128,7 +131,7 @@ class TSNEWindow(QMainWindow):
             data_numpy_array = np.array(a)
             data_numpy_array = np.reshape(data_numpy_array, (-1, len(self.rowsToClusterize.__getitem__(0))))
             result = self.tsne(data_numpy_array, dim, len(self.rowsToClusterize.__getitem__(0)), self.perplexity, self.max_iteration, 1)
-            print("result class - ", result.__class__.__name__)
+            # print("result class - ", result.__class__.__name__)
             return result
 
 
@@ -180,8 +183,8 @@ class TSNEWindow(QMainWindow):
         sumP = sum(P)
         #### experiments
         if(sumP==0):
-            print("SumP from =")
-            print(P)
+            # print("SumP from =")
+            # print(P)
             sumP=0.000000001
         ####
         H = np.log(sumP) + beta * np.sum(D * P) / sumP
@@ -196,7 +199,7 @@ class TSNEWindow(QMainWindow):
         """
 
         # Initialize some variables
-        print("Computing pairwise distances...")
+        # print("Computing pairwise distances...")
         (n, d) = X.shape
         sum_X = np.sum(np.square(X), 1)
         D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X)
@@ -209,7 +212,8 @@ class TSNEWindow(QMainWindow):
 
             # Print progress
             if i % 500 == 0:
-                print("Computing P-values for point %d of %d..." % (i, n))
+                # print("Computing P-values for point %d of %d..." % (i, n))
+                pass
 
             # Compute the Gaussian kernel and entropy for the current precision
             betamin = -np.inf
@@ -245,7 +249,7 @@ class TSNEWindow(QMainWindow):
             P[i, np.concatenate((np.r_[0:i], np.r_[i + 1:n]))] = thisP
 
         # Return final P-matrix
-        print("Mean value of sigma: %f" % np.mean(np.sqrt(1 / beta)))
+        # print("Mean value of sigma: %f" % np.mean(np.sqrt(1 / beta)))
         return P
 
     @staticmethod
@@ -255,7 +259,7 @@ class TSNEWindow(QMainWindow):
             no_dims dimensions.
         """
 
-        print("Preprocessing the data using PCA...")
+        # print("Preprocessing the data using PCA...")
         (n, d) = X.shape
         X = X - np.tile(np.mean(X, 0), (n, 1))
         (l, M) = np.linalg.eig(np.dot(X.T, X))
@@ -333,7 +337,7 @@ class TSNEWindow(QMainWindow):
             # Compute current value of cost function
             if (iter + 1) % 10 == 0:
                 C = np.sum(P * np.log(P / Q))
-                print("Iteration %d: error is %f" % (iter + 1, C))
+                # print("Iteration %d: error is %f" % (iter + 1, C))  # TODO: изменить на .format
                 self.tsne_error = C # error saving
             # Stop lying about P-values
             if iter == 100:

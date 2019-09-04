@@ -1,16 +1,16 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtGui import *  # TODO: change
+# from PyQt5.QtWidgets import *  # TODO: change
+from PyQt5.QtCore import *  # TODO: change
 
 import matplotlib
 
-import SetTsneParamsWin
+# import SetTsneParamsWin  # TODO: change
 
 matplotlib.use('agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from Lib import shutil
-from pandas import DataFrame
+# from pandas import DataFrame  # TODO: change
 
 import matplotlib.pyplot as plt
 import xlwt
@@ -18,11 +18,12 @@ import GraphInspection
 from ClusterAdjustments import ClusterDialog
 from ClusterPointsAdjustments import ClusterPointsView
 from DBScanImplementation import DBScanWindow
+from CLOPEImplementation import CLOPEWindow
 from DataPreview import DataPreviewWindow
 from AdditionalProjection import AdditionalProjectionWindow
-from UtilityClasses import *
-from TsneSolver import *
-from SetTsneParamsWin import *
+from UtilityClasses import *  # TODO: change
+from TsneSolver import *  # TODO: change
+from SetTsneParamsWin import *  # TODO: change
 
 import Constants
 
@@ -67,9 +68,12 @@ class MainWindow(QMainWindow):
         self.algorithmsMenu.addAction(self.dbscanoption)
         self.algorithmsMenu.addAction(self.tsneoption)
         self.algorithmsMenu.setEnabled(False)
+        self.clopeoption = QAction("Алгоритм CLOPE", self)
+        self.clopeoption.triggered.connect(self.clopeoptionChosen)
+        self.algorithmsMenu.addAction(self.clopeoption)
 
         self.mainTabs = QTabWidget()
-        self.mainTabs.setStyleSheet("QTabWidget { border: 0px solid black }; ");
+        self.mainTabs.setStyleSheet("QTabWidget { border: 0px solid black }; ")
         self.setCentralWidget(self.mainTabs)
         self.figure = Figure()
         self.additional_figure = Figure()
@@ -104,33 +108,42 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('icon\\app_icon.png'))
         self.setGeometry(100, 100, 640, 480)
         self.showMaximized()
-        #self.solver = TSNESolver(self)
+        # self.solver = TSNESolver(self)
         self.temp_tsne_size = 2
-        #self.globalData = GlobalData()
+        # self.globalData = GlobalData()
 
     def get_additional_figure(self):
         return self.additional_figure
 
     def set_tsne_params_pressed(self, p, d, i):
+        """
+
+        :param p:
+        :param d:
+        :param i:
+        :return: None
+        """
         if len(self.filename) > 0:
             d_data = GlobalData(Utils.readExcelData(self.filename))
             # d_d_data
+            # number of cols in file
             initial_len = len((list(d_data).__getitem__(0)))
             # here we'll try to process data
             # get tsne columns
             # from initial size to new dim
             # reducing
-            print("t-SNE с параметрами")
+            # print("t-SNE с параметрами")
             temp = TsneSolver(p, i, d, initial_len)
             self.temp_tsne_data = temp.reduce_dim(d_data)
             self.temp_tsne_size = len((list(self.temp_tsne_data).__getitem__(0)))
-            ###
-            print("initial data", list(d_data).__getitem__(0))
+
+            # print("initial data", list(d_data).__getitem__(0))
+            # Добавление переменных t-SNE  # TODO: change
             for i in range(0, self.temp_tsne_size):
                 d_data.addColumns(Column("tsne_var" + str(i), self.get_temp_tsne_column(i), i + initial_len),
                                   "tsne_var" + str(i))
-            #
-            print("final data", list(d_data).__getitem__(0))
+
+            # print("final data", list(d_data).__getitem__(0))
             newData = DataPreviewWindow.preprocessData(d_data)  # вызываем диалог предобработки данных
             self.current_data_file_name = self.filename  # put into c_d_f_n filename
             shutil.copy(self.current_data_file_name, self.temp_data_file_name)  # copied data to temp file
@@ -142,10 +155,12 @@ class MainWindow(QMainWindow):
 
         """
         self.filename = QFileDialog.getOpenFileName(self, 'Open file', "data")[0]
-        d_data = GlobalData(Utils.readExcelData(self.filename))
+        d_data = GlobalData(Utils.readExcelData(self.filename))  # TODO: file opens 2 times
         # d_d_data
-        initial_len = len((list(d_data).__getitem__(0)))
-        param_win = SetTsneParams(self, initial_len)
+        # initial_len = len((list(d_data).__getitem__(0)))
+        # param_win = SetTsneParams(self, initial_len)
+        self.set_tsne_params_pressed(50.0, 2, 500)
+
 
 
     def startWorkingWithData(self, data):
@@ -392,19 +407,23 @@ class MainWindow(QMainWindow):
         self.clusters.clear()
         self.figure.clear()
 
+    def createAdditionalProjection(self):
+        self.additionalProjectionWindow = AdditionalProjectionWindow(self)
+
     def dbscanoptionChosen(self):
         """ Вызывает окно алгоритма DBScan
 
         """
         self.dbscanwindow = DBScanWindow(self)
 
-
-    def createAdditionalProjection(self):
-        self.additionalProjectionWindow = AdditionalProjectionWindow(self)
-
-    '''  
-         TSNE
-    '''
     def tsneoptionChosen(self):
-        # Вызывает окно алгоритма t-SNE
-        self.dbscanwindow = TSNEWindow(self)
+        """ Вызов окна алгоритма t-SNE
+
+        """
+        self.tsnewindow = TSNEWindow(self)
+
+    def clopeoptionChosen(self):
+        """ Вызов окна алгоритма CLOPE
+
+        """
+        self.clopewindow = CLOPEWindow(self)
