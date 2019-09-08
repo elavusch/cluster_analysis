@@ -1,6 +1,14 @@
-
+import os
 import sys
+# TODO: improve bad import for matplotlib
 
+# TODO: research about sys._MEIPASS
+if hasattr(sys, 'frozen'):
+    os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
+os.environ['PATH'] = 'C:\\Users\\elavu\\Documents\\NIR\\Cluster 221\\Cluster Analysis 2.2.1\\venv\\Lib\\site-packages\\PyQt5\\Qt\\bin' + ';' + os.environ['PATH']
+
+# TODO: append to hidden import for PyInstaller
+from PyQt5 import sip
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 from MainInterface import MainWindow
