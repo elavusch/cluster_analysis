@@ -3,7 +3,7 @@
 /build/**
 /dist/**
 /data/**
-*.spec
+*.exe
 *.txt
 /.idea/**
 /venv/**
