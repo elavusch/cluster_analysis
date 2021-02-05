@@ -1,6 +1,7 @@
+import Constants
 from PyQt5.QtWidgets import *
 from UtilityClasses import Cluster
-import Constants
+from sklearn import KDTree, DBSCAN
 
 
 class DBScanWindow(QMainWindow):

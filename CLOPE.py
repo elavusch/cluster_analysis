@@ -26,12 +26,12 @@ class Cluster:
         self.histogram = {}
 
     def add_transaction(self, transaction):
-        '''
+        """
         Добавить транзакцию в кластер. Перебираем все
         элементы гистограммы, достраиваем гистограмму
         Input parametres:
         transaction -- слайс с объектами (транзакция)
-        '''
+        """
         # Поочерёдно перебираем все элементы гистограммы
         # и добавляем в соответствующий столбец гистограммы. Если
         # рассматриваемого элемента нет, то добавим новый столбец в гистограмму
@@ -49,7 +49,7 @@ class Cluster:
         self.count_transactions += 1
 
     def remove_transaction(self, transaction):
-        '''
+        """
         Удалить транзакцию из кластера. Перебираем все элементы
         гистограммы, убираем все элементы транзакции из
         гистограммы
@@ -62,7 +62,7 @@ class Cluster:
         процессе модификации будет исключена транзакция, которая
         не была добавлена в соответствующий кластер, алгоритм
         выдаст неверный результат
-        '''
+        """
         for item in transaction:
             if self.histogram[item] == 0:
                 del self.histogram[item]
@@ -110,7 +110,7 @@ class CLOPE:
         self.is_save_history = is_save_history
 
     def delta_transaction(self, transaction, cluster_number, r):
-        '''
+        """
         Рассчитывается изменение Goal, которое получит
         целевая функция при добавлении транзакции к кластеру clusterNumber.
         Кластер, доставляющий максимальное значение функции,
@@ -126,7 +126,7 @@ class CLOPE:
         Returned value:
         Возвращает значение изменения целевой функции
         при добавлении transaction к кластеру clusterNumber
-        '''
+        """
         area = self.clusters[cluster_number].area + len(transaction)
         width = self.clusters[cluster_number].width
         for item in transaction:
@@ -144,12 +144,12 @@ class CLOPE:
         return new_delta_value - old_delta_value
 
     def noise_reduction(self, limit):
-        '''
+        """
         Функция удаления шума. Все кластеры,
         размер которых больше limit, остаются
         Input parametres:
         limit -- уровень шума кластеров
-        '''
+        """
         # Удаляем все пустые и зашумлённые кластеры
         new_clusters = {}
         for item in self.clusters:
@@ -160,7 +160,7 @@ class CLOPE:
         self.clusters = new_clusters
 
     def get_goal_function(self, r):
-        '''
+        """
         Вычисление целевой функции для всех уже сформированных кластеров
         Используется при модификации кластеров, либо их инициализации
         Input parametres:
@@ -168,7 +168,7 @@ class CLOPE:
         отталкивание кластеров в смысле CLOPE
         Returned value:
         Возвращает значение целевой функции
-        '''
+        """
         measure = 0.0
         # Перебираем все кластеры и для каждого рассчитываем его вес.
         # Все веса суммируются в общую метрику
@@ -183,14 +183,15 @@ class CLOPE:
                 measure += item.area / (item.width ** r) * item.count_transactions / self.count_transactions
         return measure
 
+    # TODO: rename parameter
     def move_transaction(self, transaction, id, repulsion=2, max_count_clusters=None):
-        '''
+        """
         Добавление новой транзакции
         Пытаемся перераспределить транзакцию (transaction) с номером id
         в другой кластер так, чтобы целевая функция приняла
         максимальное значение
 
-        Input parametres:
+        Input parameters:
         transaction -- транзакция (слайс с объектами)
         id -- номер транзакции
         repulsion -- вещественное число, обозначающие
@@ -200,7 +201,7 @@ class CLOPE:
         Returned parameter:
         Возвращается номер кластера, в который
         была добавлена текущая транзакция
-        '''
+        """
         r = repulsion
         max_value = None
         max_value_index = None
@@ -238,11 +239,11 @@ class CLOPE:
         return max_value_index
 
     def get_noise_limit(self, percentile=0.75):
-        '''
+        """
         Адаптивное вычисление порога шума. Порог вычистывается
         относительно медианы размеров кластеров (в числе
         транзакций). Берётся 3/4 медианы
-        '''
+        """
         size_clusters = []
         for item in self.clusters:
             size_clusters.append(self.clusters[item].count_transactions)
@@ -258,7 +259,7 @@ class CLOPE:
                       is_noise_reduction=-1,
                       noise_median_threshold=0.75,
                       max_count_clusters=None):
-        '''
+        """
         Инициализация кластеров
 
         Input parametres:
@@ -273,7 +274,7 @@ class CLOPE:
         числу элементов в кластере, при котором он уничтожается).
         Если isNoiseReduction == -1, то порог выбирается адаптивно (всё то,
         что больше медианы остаётся)
-        '''
+        """
         index = 0
 
         # Словарь?!
@@ -312,7 +313,7 @@ class CLOPE:
                   is_noise_reduction=-1,
                   noise_median_threshold=0.75,
                   max_count_clusters=None):
-        '''
+        """
         Выполнение следующего шага алгоритма
 
         Input parametres:
@@ -331,7 +332,7 @@ class CLOPE:
         Returned parameter:
         Число операций по перенесению
         транзакции из кластера в кластер
-        '''
+        """
 
         # Удаляем все пустые (или шумовые, если isNoiseReduction > 0) кластеры
         if is_noise_reduction < 0:
@@ -376,9 +377,9 @@ class CLOPE:
         return eps
 
     def print_history_count(self, repulsion, seed):
-        '''
+        """
         График кол-ва транзакций в разных классах
-        '''
+        """
         # Длина всех векторов с историями одинакова
         len_history = len(list(self.clusters.values())[0].history_count_transact)
         for index_cluster in self.clusters:

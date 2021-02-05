@@ -133,7 +133,7 @@ def getSupportiveLine(columns, i, j):
                   linestyle="None",
                   marker=Constants.DEFAULT_POINT_SHAPE,
                   color=Constants.INVISIBLE_COLOR,
-                  markersize = Constants.DEFAULT_MARKER_SIZE_SMALL)
+                  markersize=Constants.DEFAULT_MARKER_SIZE_SMALL)
     return line
 
 def fillTableWithData(tablewidget, data):

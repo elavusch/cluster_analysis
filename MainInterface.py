@@ -154,17 +154,15 @@ class MainWindow(QMainWindow):
         """ Действия, выполняемые при нажатии кнопки открытия файла
 
         """
-        self.filename = QFileDialog.getOpenFileName(self, 'Open file', "data")[0]
+        self.filename = QFileDialog.getOpenFileName(self, 'Open file', 'data')[0]
         d_data = GlobalData(Utils.readExcelData(self.filename))  # TODO: file opens 2 times
-        # d_d_data
         # initial_len = len((list(d_data).__getitem__(0)))
         # param_win = SetTsneParams(self, initial_len)
         self.set_tsne_params_pressed(50.0, 2, 500)
 
-
-
     def startWorkingWithData(self, data):
         """ Инициализация данных в программе
+
         :param data: инициализируемые данные - это объект типа Data
         """
 
@@ -179,7 +177,6 @@ class MainWindow(QMainWindow):
         book = xlwt.Workbook(self.temp_data_file_name)
         sh = book.add_sheet("tsne")
 
-
     def canvasClicked(self, event):
         """ Обработчик кликов мышью по области с графиками
 
@@ -191,7 +188,8 @@ class MainWindow(QMainWindow):
                 self.inspectionWindow = GraphInspection.GraphInspectionWindow(self, ax)
 
     def addCluster(self, cluster):
-        """ Добавление кластера и прочие связанные с этим действия.
+        """
+        Добавление кластера и прочие связанные с этим действия.
         Для добавления нового кластера необходимо использовать эту функцию.
 
         :param cluster: добавляемый кластер - это объект типа Cluster
@@ -200,14 +198,21 @@ class MainWindow(QMainWindow):
         self.addClusterToTable(cluster)
         self.refreshCanvas()
 
+    # TODO: doc-string
     def addClusters(self, clusters):
+        """
+
+        :param clusters:
+        :return:
+        """
         self.clusters.extend(clusters)
         for cluster in clusters:
             self.addClusterToTable(cluster)
         self.refreshCanvas()
 
     def addClusterToTable(self, cluster):
-        """ Функция, добавляющая кластер в таблицу с кластерами. Вызывается функцией addCluster
+        """
+        Функция, добавляющая кластер в таблицу с кластерами. Вызывается функцией addCluster
 
         :param cluster: добавляемый кластер - это объект типа Cluster
         """
@@ -284,8 +289,10 @@ class MainWindow(QMainWindow):
         cluster = ClusterDialog.adjustCluster(self.clusters[index])
         if cluster is not None:
             self.clusters[index] = cluster
-            self.refreshClusterTable()  # TODO вместо обновления всей таблицы, обновлять только строку этого кластера refreshRow
-            self.refreshCanvas()  # и перерисовывать только его точки
+            # TODO: вместо обновления всей таблицы, обновлять только строку этого кластера refreshRow
+            self.refreshClusterTable()
+            # TODO: и перерисовывать только его точки
+            self.refreshCanvas()
 
     def hideorshowCluster(self, index):
         """ Изменяет свойство видимости кластера и рендерит изменения.
@@ -317,7 +324,7 @@ class MainWindow(QMainWindow):
 
         """
         columns = self.globalData.getSignificantColumns()
-        #globalData.addRow()
+        # globalData.addRow()
         columnCount = self.globalData.significantColumnCount()
 
         self.matrixWidget.resize((columnCount+self.temp_tsne_size+1) * 200, (columnCount+self.temp_tsne_size)* 200)

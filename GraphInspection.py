@@ -15,7 +15,6 @@ from UtilityClasses import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-
 class GraphInspectionWindow(QMainWindow):
     """ Окно детального изучения графика.
 
@@ -368,7 +367,8 @@ class GraphInspectionWindow(QMainWindow):
             self._selectionPolygon.append(point)
             # почему два, а не один? Программирование наугад.
             lineAmount = 2
-            # нужно сначала удалить предыдущий рисунок выделения(если он есть). Для этого считаем сколько линий должно быть
+            # Нужно сначала удалить предыдущий рисунок выделения (если он есть)
+            # Для этого считаем сколько линий должно быть
             for cluster in self.parent().clusters:
                 lineAmount += 1
             # все остальные линии удаляем
@@ -423,8 +423,7 @@ class GraphInspectionWindow(QMainWindow):
     def showScalingView(self):
         self.scalingAdjustmentWindow = ScaleAdjustmentsView(self, self._axes)
 
-
-    # TODO избавиться от всего, что ниже. Сделано очень наспех. Значительное дублирование кода из ClusterPointsAdjustments
+    # TODO избавиться от всего, что ниже. Сделано наспех. Значительное дублирование кода из ClusterPointsAdjustments
     def refreshBarChart(self):
         self.axes.clear()
         xcoords = np.arange(len(self._selectedPoints))

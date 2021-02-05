@@ -100,8 +100,7 @@ class TSNEWindow(QMainWindow):
                 anim_sprite.draw()
             pyglet.app.run()
 
-           # self.remove_all_frames()
-
+            # self.remove_all_frames()
 
     def perform_without_drawing(self, dim):
         if self.prepareData():
